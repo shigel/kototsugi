@@ -1,0 +1,40 @@
+[project]
+name = "kototsugi"
+version = "0.1.0"
+description = "Meeting Driven Development CLI that turns meeting transcripts into specs, questions, diagrams, issues, and implementation plans."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "shigeru saito", email = "saito@najimino.co.jp" }]
+dependencies = []
+
+[project.scripts]
+kototsugi = "kototsugi.cli:main"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "ruff>=0.6",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["UP006", "UP007", "UP035"]
