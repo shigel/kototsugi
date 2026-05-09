@@ -419,8 +419,9 @@ Issue 候補の例:
         ↓
 [Outputs / Integrations]
   - Markdown files
-  - Web dashboard
+  - macOS notifications
   - Slack notifications
+  - Web dashboard
   - GitHub / Linear / Notion
   - Coding agents
 ```
@@ -514,8 +515,10 @@ Issue 候補の例:
 - 会議を邪魔しないこと
 - 質問は Top 1〜3 に絞ること
 - blocker のみ強調表示すること
-- Slack 通知は頻度制限すること
-- 重要度が低いものはダッシュボード内に留めること
+- MVP では macOS 通知のみを使うこと
+- macOS 通知をクリックしたら、可能な限り実行中プロセスのターミナル / アプリウィンドウにフォーカスを戻すこと
+- Slack 通知は MVP 後の拡張とし、導入時は頻度制限すること
+- 重要度が低いものは通知せず、成果物ファイル内に留めること
 
 ### 9.3 承認 UI
 
@@ -544,10 +547,13 @@ Issue 候補の例:
 - Mermaid 形式の簡易図解生成
 - Issue 候補 JSON 生成
 - 会議終了時の implementation_plan.md 生成
-- Slack または Web UI への結果表示
+- macOS 通知による blocker 質問・会議終了・承認待ちアクションの通知
+- 通知クリック時に実行中プロセスのウィンドウへフォーカスを戻す導線
 
 ### 10.2 MVPでやらないもの
 
+- Slack 通知
+- Web dashboard
 - 完全自動 Issue 登録
 - 完全自動 PR 作成
 - 本番CRM/ATS連携
@@ -566,6 +572,7 @@ Issue 候補の例:
   - issue_candidates.json
   - implementation_plan.md
 - 会議中に blocker 質問を3件以上適切に提示できる
+- blocker 質問と会議終了を macOS 通知で受け取れる
 - Issue 候補のうち、人間が採用可能と判断するものが半数以上ある
 - 生成された implementation_plan.md を元に、実装エージェントが初期実装に着手できる
 
@@ -592,23 +599,31 @@ Issue 候補の例:
 - Issue 候補生成
 - Mermaid 図解生成
 - implementation_plan.md 生成
+- macOS 通知による blocker 質問・会議終了・承認待ちアクションの提示
+- 通知クリック時に実行中プロセスのウィンドウへフォーカスする
 
-### Phase 3: 会議中 UI
+### Phase 3: Slack 通知
+
+- Slack 通知
+- blocker / high_impact の頻度制限
+- 会議終了時の成果物リンク通知
+- 承認待ちアクションの通知
+
+### Phase 4: 会議中 UI
 
 - Web dashboard
-- Slack 通知
 - Top questions 表示
 - 図解表示
 - Issue 候補レビュー
 
-### Phase 4: 外部連携
+### Phase 5: 外部連携
 
 - GitHub Issue 登録
 - Linear 登録
 - Notion / Google Docs 出力
 - コーディングエージェント起動
 
-### Phase 5: モード拡張
+### Phase 6: モード拡張
 
 - Sales
 - Hiring
@@ -627,11 +642,11 @@ Issue 候補の例:
   - Bot 参加
   - ブラウザ拡張
   - SIP / WebRTC
-- 初期 UI を Web dashboard にするか Slack 通知中心にするか
 - Issue 登録先を GitHub に絞るか Linear も同時対応するか
-- モック生成を MVP に含めるか Phase 3 以降に回すか
+- モック生成を MVP に含めるか Phase 4 以降に回すか
 - 会議データ保存期間と削除ポリシー
 - 話者分離の必要レベル
+- macOS 通知クリック時のフォーカス復帰を Terminal.app / iTerm2 / VS Code 統合ターミナルのどこまで対応するか
 
 ---
 
@@ -642,7 +657,7 @@ Issue 候補の例:
 対策:
 
 - blocker / high_impact のみ会議中に表示
-- clarification / later はダッシュボード内に留める
+- clarification / later は通知せず成果物ファイル内に留める
 - 通知頻度を制限する
 
 ### 13.2 partial transcript に基づいて誤った要件化をする
