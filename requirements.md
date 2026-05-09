@@ -43,6 +43,12 @@ Hermes、Codex、Claude Code、OpenCode、GitHub Actions、Linear、Notion な�
 
 Realtime モデルにすべての重い処理を担わせない。
 
+初期検証では `gpt-realtime-2` を先行採用する。これは文字起こし精度だけでなく、音声理解・重要イベント検出・質問生成・ワーカー起動トリガーまで含めて Realtime Meeting Copilot の中核仮説を検証するためである。
+
+`gpt-realtime-whisper` は低遅延文字起こし専用経路として後段で評価する。MVP では `gpt-realtime-2` の transcript event を入口にし、必要になった時点で文字起こし専用セッションへ差し替え・併用できる設計にする。
+
+`gpt-realtime-translate` は多言語会議・同時通訳モードの候補とし、MVP には含めない。
+
 Realtime 側の責務:
 
 - 音声のリアルタイム理解
@@ -539,7 +545,7 @@ Issue 候補の例:
 ### 10.1 MVPで作るもの
 
 - 音声入力またはテキストストリーム入力
-- Realtime API による文字起こし
+- `gpt-realtime-2` / Realtime API による音声理解・文字起こし・イベント検出
 - transcript 保存
 - 30〜60秒ごとのローリング要約
 - 質問リスト生成と優先順位づけ
@@ -552,6 +558,8 @@ Issue 候補の例:
 
 ### 10.2 MVPでやらないもの
 
+- `gpt-realtime-whisper` への文字起こし専用経路の切り替え
+- `gpt-realtime-translate` による多言語同時通訳
 - Slack 通知
 - Web dashboard
 - 完全自動 Issue 登録
@@ -591,6 +599,7 @@ Issue 候補の例:
 - gpt-realtime-2 / Realtime API で音声入力を処理
 - partial / final transcript event を生成
 - transcript 保存とローリング要約を実装
+- gpt-realtime-whisper は後段評価とし、Phase 1 では導入しない
 
 ### Phase 2: Development Meeting Mode
 
