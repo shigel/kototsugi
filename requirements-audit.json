@@ -1,0 +1,1244 @@
+{
+  "objective": "requirements.md を実現すること",
+  "success_criteria": [
+    "MVP core artifacts are generated from transcript/event input.",
+    "Realtime audio preparation, streaming, and executed live check evidence exist.",
+    "Final transcript events ground confirmed artifacts; partial events remain UI-only.",
+    "Questions, requirements, diagrams, issues, notifications, and approval gates exist.",
+    "Live verification reports no blocked MVP checks."
+  ],
+  "artifact_dir": "/private/tmp/sokcon-completion-audit/artifacts",
+  "passed": false,
+  "completion_status": "blocked",
+  "checks": [
+    {
+      "id": "mvp_core_outputs",
+      "requirement": "MVP success condition files are generated.",
+      "passed": true,
+      "files": [
+        {
+          "file": "transcript.md",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "summary.md",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "requirements.md",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "requirements_items.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "open_questions.md",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "architecture.md",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "issue_candidates.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "issue_status.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "implementation_plan.md",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": []
+    },
+    {
+      "id": "realtime_audio",
+      "requirement": "Realtime audio preparation, streaming, and live-check paths exist.",
+      "passed": true,
+      "files": [
+        {
+          "file": "audio_manifest.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "audio_chunks.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "realtime_send_plan.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "realtime_live_check_result.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "run_realtime_live_check",
+          "present": true
+        },
+        {
+          "term": "build_realtime_api_compatibility_report",
+          "present": true
+        },
+        {
+          "term": "audio_input_manifest",
+          "present": true
+        },
+        {
+          "term": "SOKCON_AUDIO_INPUT_DEVICE",
+          "present": true
+        },
+        {
+          "term": "BlackHole",
+          "present": true
+        },
+        {
+          "term": "mixed_self_and_remote_audio",
+          "present": true
+        },
+        {
+          "term": "participant_audio_policy",
+          "present": true
+        },
+        {
+          "term": "supported_meeting_apps",
+          "present": true
+        },
+        {
+          "term": "Google Meet",
+          "present": true
+        },
+        {
+          "term": "Zoom",
+          "present": true
+        },
+        {
+          "term": "Slack Huddle",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": [
+        {
+          "file": "audio_manifest.json",
+          "path": [
+            "format"
+          ],
+          "equals": "wav",
+          "passed": true,
+          "actual": "wav"
+        },
+        {
+          "file": "audio_manifest.json",
+          "path": [
+            "realtime_sample_rate_ready"
+          ],
+          "equals": true,
+          "passed": true,
+          "actual": true
+        },
+        {
+          "file": "audio_manifest.json",
+          "path": [
+            "realtime_input_audio_format"
+          ],
+          "equals": "pcm16",
+          "passed": true,
+          "actual": "pcm16"
+        },
+        {
+          "file": "realtime_send_plan.json",
+          "path": [
+            "event_count"
+          ],
+          "equals": 2,
+          "passed": true,
+          "actual": 2
+        },
+        {
+          "file": "realtime_send_plan.json",
+          "path": [
+            "events",
+            0,
+            "type"
+          ],
+          "equals": "input_audio_buffer.append",
+          "passed": true,
+          "actual": "input_audio_buffer.append"
+        },
+        {
+          "file": "realtime_send_plan.json",
+          "path": [
+            "events",
+            1,
+            "type"
+          ],
+          "equals": "input_audio_buffer.commit",
+          "passed": true,
+          "actual": "input_audio_buffer.commit"
+        }
+      ]
+    },
+    {
+      "id": "partial_final_transcripts",
+      "requirement": "partial transcript is separated from final grounded artifacts.",
+      "passed": true,
+      "files": [
+        {
+          "file": "transcript_events.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "partial_transcript.md",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "process_transcript_events",
+          "present": true
+        },
+        {
+          "term": "final_transcript_event_count",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": [
+        {
+          "file": "transcript_events.json",
+          "path": [
+            0,
+            "meeting_id"
+          ],
+          "equals": "mtg_local",
+          "passed": true,
+          "actual": "mtg_local"
+        },
+        {
+          "file": "transcript_events.json",
+          "path": [
+            0,
+            "type"
+          ],
+          "equals": "final",
+          "passed": true,
+          "actual": "final"
+        }
+      ]
+    },
+    {
+      "id": "questions_and_status",
+      "requirement": "Questions and issues are prioritized and can be updated.",
+      "passed": true,
+      "files": [
+        {
+          "file": "open_questions.md",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "questions.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "question_status.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "blocker_question_suggestions.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "issue_candidates.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "issue_status.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "blocker",
+          "present": true
+        },
+        {
+          "term": "high_impact",
+          "present": true
+        },
+        {
+          "term": "clarification",
+          "present": true
+        },
+        {
+          "term": "later",
+          "present": true
+        },
+        {
+          "term": "top_question_limit",
+          "present": true
+        },
+        {
+          "term": "granularity",
+          "present": true
+        },
+        {
+          "term": "granularity_reason",
+          "present": true
+        },
+        {
+          "term": "classify_issue_granularity",
+          "present": true
+        },
+        {
+          "term": "merged_candidate_count",
+          "present": true
+        },
+        {
+          "term": "merge_issue_candidates",
+          "present": true
+        },
+        {
+          "term": "update_question_status",
+          "present": true
+        },
+        {
+          "term": "update_issue_status",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": [
+        {
+          "file": "questions.json",
+          "path": [
+            0,
+            "meeting_id"
+          ],
+          "equals": "mtg_local",
+          "passed": true,
+          "actual": "mtg_local"
+        },
+        {
+          "file": "questions.json",
+          "path": [
+            0,
+            "status"
+          ],
+          "equals": "open",
+          "passed": true,
+          "actual": "open"
+        },
+        {
+          "file": "questions.json",
+          "path": [
+            0,
+            "category"
+          ],
+          "equals": "blocker",
+          "passed": true,
+          "actual": "blocker"
+        },
+        {
+          "file": "questions.json",
+          "path": [
+            0,
+            "created_at"
+          ],
+          "equals": "2026-05-08T00:00:00Z",
+          "passed": true,
+          "actual": "2026-05-08T00:00:00Z"
+        },
+        {
+          "file": "issue_candidates.json",
+          "path": [
+            0,
+            "meeting_id"
+          ],
+          "equals": "mtg_local",
+          "passed": true,
+          "actual": "mtg_local"
+        },
+        {
+          "file": "issue_candidates.json",
+          "path": [
+            0,
+            "status"
+          ],
+          "equals": "candidate",
+          "passed": true,
+          "actual": "candidate"
+        },
+        {
+          "file": "issue_candidates.json",
+          "path": [
+            0,
+            "approval_required"
+          ],
+          "equals": true,
+          "passed": true,
+          "actual": true
+        },
+        {
+          "file": "issue_candidates.json",
+          "path": [
+            0,
+            "source_range"
+          ],
+          "equals": "00:00 PM",
+          "passed": true,
+          "actual": "00:00 PM"
+        },
+        {
+          "file": "issue_candidates.json",
+          "path": [
+            0,
+            "external_url"
+          ],
+          "equals": null,
+          "passed": true,
+          "actual": null
+        }
+      ]
+    },
+    {
+      "id": "requirements_markdown_sections",
+      "requirement": "Requirements Markdown covers the required specification sections.",
+      "passed": true,
+      "files": [
+        {
+          "file": "requirements.md",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "requirements_items.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [],
+      "forbidden_code_terms": [],
+      "content_terms": [
+        {
+          "term": "## Background / Purpose",
+          "present": true
+        },
+        {
+          "term": "## Target Users",
+          "present": true
+        },
+        {
+          "term": "## Use Cases",
+          "present": true
+        },
+        {
+          "term": "## Functional Requirements",
+          "present": true
+        },
+        {
+          "term": "## Non-functional Requirements",
+          "present": true
+        },
+        {
+          "term": "## UI/UX Requirements",
+          "present": true
+        },
+        {
+          "term": "## Permission / Authentication Requirements",
+          "present": true
+        },
+        {
+          "term": "## Data Requirements",
+          "present": true
+        },
+        {
+          "term": "## External Integrations",
+          "present": true
+        },
+        {
+          "term": "## Constraints",
+          "present": true
+        },
+        {
+          "term": "## Decisions",
+          "present": true
+        },
+        {
+          "term": "## Open Questions",
+          "present": true
+        },
+        {
+          "term": "## Assumptions",
+          "present": true
+        },
+        {
+          "term": "## Risks",
+          "present": true
+        },
+        {
+          "term": "## Acceptance Criteria",
+          "present": true
+        }
+      ],
+      "json_assertions": [
+        {
+          "file": "requirements_items.json",
+          "path": [
+            0,
+            "meeting_id"
+          ],
+          "equals": "mtg_local",
+          "passed": true,
+          "actual": "mtg_local"
+        },
+        {
+          "file": "requirements_items.json",
+          "path": [
+            0,
+            "updated_at"
+          ],
+          "equals": "2026-05-08T00:00:00Z",
+          "passed": true,
+          "actual": "2026-05-08T00:00:00Z"
+        },
+        {
+          "file": "requirements_items.json",
+          "path": [
+            0,
+            "status"
+          ],
+          "equals": "draft",
+          "passed": true,
+          "actual": "draft"
+        },
+        {
+          "file": "requirements_items.json",
+          "path": [
+            0,
+            "source_event_ids",
+            0
+          ],
+          "equals": "line_1",
+          "passed": true,
+          "actual": "line_1"
+        }
+      ]
+    },
+    {
+      "id": "audit_and_privacy",
+      "requirement": "Audit, approval, privacy, and retention controls are generated.",
+      "passed": true,
+      "files": [
+        {
+          "file": "audit_log.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "action_queue.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "approval_plan.json",
+          "exists": false,
+          "required": false
+        },
+        {
+          "file": "privacy_manifest.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "retention_policy.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "cleanup_retention",
+          "present": true
+        },
+        {
+          "term": "build_approval_plan",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": []
+    },
+    {
+      "id": "notifications",
+      "requirement": "macOS notification and notification policy artifacts exist.",
+      "passed": true,
+      "files": [
+        {
+          "file": "macos_notification_plan.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "notification_policy.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "send_macos_notifications",
+          "present": true
+        },
+        {
+          "term": "SOKCON_NOTIFICATION_FOCUS_APP",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": [
+        {
+          "file": "notification_policy.json",
+          "path": [
+            "macos_notifications",
+            "rate_limit",
+            "max_blocker_questions_per_meeting"
+          ],
+          "equals": 3,
+          "passed": true,
+          "actual": 3
+        },
+        {
+          "file": "notification_policy.json",
+          "path": [
+            "macos_notifications",
+            "rate_limit",
+            "clarification_and_later"
+          ],
+          "equals": "file_only",
+          "passed": true,
+          "actual": "file_only"
+        }
+      ]
+    },
+    {
+      "id": "external_registration",
+      "requirement": "External registration drafts and approved execution paths exist.",
+      "passed": true,
+      "files": [
+        {
+          "file": "external_registration_payloads.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "post_external_registration",
+          "present": true
+        },
+        {
+          "term": "execute_approval_plan",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": []
+    },
+    {
+      "id": "post_meeting_actions",
+      "requirement": "Implementation agent and PR handoff drafts exist.",
+      "passed": true,
+      "files": [
+        {
+          "file": "agent_handoff.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "branch_creation_draft.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "pull_request_draft.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "execute_agent_start_action",
+          "present": true
+        },
+        {
+          "term": "branch_creation",
+          "present": true
+        },
+        {
+          "term": "pull_request_creation",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": []
+    },
+    {
+      "id": "diagrams_and_mockups",
+      "requirement": "Diagrams and UI mockups are generated when applicable.",
+      "passed": true,
+      "files": [
+        {
+          "file": "diagrams.md",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "diagram_revisions.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "dashboard.html",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "dashboard_mockup.html",
+          "exists": true,
+          "required": false
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "render_sales_problem_structure_diagram",
+          "present": true
+        },
+        {
+          "term": "render_sales_proposal_story_diagram",
+          "present": true
+        },
+        {
+          "term": "render_sales_adoption_steps_diagram",
+          "present": true
+        },
+        {
+          "term": "render_talk_structure_diagram",
+          "present": true
+        },
+        {
+          "term": "render_talk_storyline_diagram",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": []
+    },
+    {
+      "id": "diarization",
+      "requirement": "Speaker metadata and external diarization adapter artifacts exist.",
+      "passed": true,
+      "files": [
+        {
+          "file": "speaker_summary.md",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "diarization_manifest.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "diarization_segments.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "execute_diarization",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": []
+    },
+    {
+      "id": "meeting_modes",
+      "requirement": "Meeting modes expose goals, outputs, scoring, tools, and actions.",
+      "passed": true,
+      "files": [
+        {
+          "file": "mode_profile.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "development",
+          "present": true
+        },
+        {
+          "term": "sales",
+          "present": true
+        },
+        {
+          "term": "hiring",
+          "present": true
+        },
+        {
+          "term": "presentation",
+          "present": true
+        },
+        {
+          "term": "customer_success",
+          "present": true
+        },
+        {
+          "term": "fundraising",
+          "present": true
+        },
+        {
+          "term": "legal",
+          "present": true
+        },
+        {
+          "term": "executive",
+          "present": true
+        },
+        {
+          "term": "research",
+          "present": true
+        },
+        {
+          "term": "general",
+          "present": true
+        },
+        {
+          "term": "mode_specific_outputs",
+          "present": true
+        },
+        {
+          "term": "render_mode_progress_items",
+          "present": true
+        },
+        {
+          "term": "Mode Score / Progress",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": []
+    },
+    {
+      "id": "approval_gate",
+      "requirement": "External registration, email, branch, agent start, and PR creation require approval.",
+      "passed": true,
+      "files": [
+        {
+          "file": "action_queue.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "approval_plan.json",
+          "exists": false,
+          "required": false
+        },
+        {
+          "file": "pull_request_draft.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "branch_creation_draft.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "external_email_draft.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "requires_human_approval",
+          "present": true
+        },
+        {
+          "term": "external_issue_registration",
+          "present": true
+        },
+        {
+          "term": "external_email_sending",
+          "present": true
+        },
+        {
+          "term": "branch_creation",
+          "present": true
+        },
+        {
+          "term": "implementation_agent_start",
+          "present": true
+        },
+        {
+          "term": "pull_request_creation",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": [
+        {
+          "file": "external_email_draft.json",
+          "path": [
+            "requires_human_approval"
+          ],
+          "equals": true,
+          "passed": true,
+          "actual": true
+        },
+        {
+          "file": "branch_creation_draft.json",
+          "path": [
+            "requires_human_approval"
+          ],
+          "equals": true,
+          "passed": true,
+          "actual": true
+        },
+        {
+          "file": "pull_request_draft.json",
+          "path": [
+            "requires_human_approval"
+          ],
+          "equals": true,
+          "passed": true,
+          "actual": true
+        },
+        {
+          "file": "agent_handoff.json",
+          "path": [
+            "requires_human_approval"
+          ],
+          "equals": true,
+          "passed": true,
+          "actual": true
+        }
+      ]
+    },
+    {
+      "id": "parallel_pipeline_contract",
+      "requirement": "Event bus and worker failure isolation contracts exist.",
+      "passed": true,
+      "files": [
+        {
+          "file": "event_bus.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "worker_status.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "performance_manifest.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "mvp_success_conditions.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": [
+        {
+          "file": "performance_manifest.json",
+          "path": [
+            "targets",
+            "post_meeting_generation_seconds"
+          ],
+          "equals": 300,
+          "passed": true,
+          "actual": 300
+        },
+        {
+          "file": "performance_manifest.json",
+          "path": [
+            "passes_targets",
+            "post_meeting_generation"
+          ],
+          "equals": true,
+          "passed": true,
+          "actual": true
+        }
+      ]
+    },
+    {
+      "id": "decoupled_architecture",
+      "requirement": "The implementation remains Hermes-independent and loosely coupled.",
+      "passed": true,
+      "files": [
+        {
+          "file": "requirements_traceability.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [
+        {
+          "term": "dependencies = []",
+          "present": true
+        },
+        {
+          "term": "external_registration_payloads",
+          "present": true
+        }
+      ],
+      "forbidden_code_terms": [
+        {
+          "term": "import hermes",
+          "present": false
+        },
+        {
+          "term": "from hermes",
+          "present": false
+        },
+        {
+          "term": "hermes.",
+          "present": false
+        }
+      ],
+      "content_terms": [],
+      "json_assertions": []
+    },
+    {
+      "id": "rolling_summary_cadence",
+      "requirement": "Rolling summaries are generated on a 30-60 second cadence.",
+      "passed": true,
+      "files": [
+        {
+          "file": "rolling_summary.md",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "performance_manifest.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [],
+      "forbidden_code_terms": [],
+      "content_terms": [
+        {
+          "term": "## Window 1: 00:00-01:00",
+          "present": true
+        }
+      ],
+      "json_assertions": [
+        {
+          "file": "performance_manifest.json",
+          "path": [
+            "targets",
+            "rolling_summary_window_seconds_min"
+          ],
+          "equals": 30,
+          "passed": true,
+          "actual": 30
+        },
+        {
+          "file": "performance_manifest.json",
+          "path": [
+            "targets",
+            "rolling_summary_window_seconds_max"
+          ],
+          "equals": 60,
+          "passed": true,
+          "actual": 60
+        },
+        {
+          "file": "performance_manifest.json",
+          "path": [
+            "passes_targets",
+            "rolling_summary_window_configured"
+          ],
+          "equals": true,
+          "passed": true,
+          "actual": true
+        }
+      ]
+    },
+    {
+      "id": "traceability",
+      "requirement": "Traceability has no unimplemented requirements and MVP live checks are ready.",
+      "passed": false,
+      "files": [
+        {
+          "file": "requirements_traceability.json",
+          "exists": true,
+          "required": true
+        },
+        {
+          "file": "live_verification_manifest.json",
+          "exists": true,
+          "required": true
+        }
+      ],
+      "code_terms": [],
+      "forbidden_code_terms": [],
+      "content_terms": [],
+      "json_assertions": [
+        {
+          "file": "requirements_traceability.json",
+          "path": [
+            "not_implemented"
+          ],
+          "equals": [],
+          "passed": true,
+          "actual": []
+        },
+        {
+          "file": "live_verification_manifest.json",
+          "path": [
+            "mvp_status"
+          ],
+          "equals": "ready",
+          "passed": false,
+          "actual": "blocked"
+        },
+        {
+          "file": "live_verification_manifest.json",
+          "path": [
+            "blocked_mvp_checks"
+          ],
+          "equals": [],
+          "passed": false,
+          "actual": [
+            "openai_realtime_api"
+          ]
+        },
+        {
+          "file": "realtime_live_check_result.json",
+          "path": [
+            "status"
+          ],
+          "equals": "completed",
+          "passed": false,
+          "actual": "failed"
+        },
+        {
+          "file": "realtime_live_check_result.json",
+          "path": [
+            "network_request_executed"
+          ],
+          "equals": true,
+          "passed": false,
+          "actual": false
+        }
+      ]
+    }
+  ],
+  "missing_count": 1,
+  "failed_check_ids": [
+    "traceability"
+  ],
+  "blockers": [
+    {
+      "id": "traceability",
+      "requirement": "Traceability has no unimplemented requirements and MVP live checks are ready.",
+      "missing_files": [],
+      "missing_code_terms": [],
+      "present_forbidden_code_terms": [],
+      "missing_content_terms": [],
+      "failed_json_assertions": [
+        {
+          "file": "live_verification_manifest.json",
+          "path": [
+            "mvp_status"
+          ],
+          "expected": "ready",
+          "actual": "blocked"
+        },
+        {
+          "file": "live_verification_manifest.json",
+          "path": [
+            "blocked_mvp_checks"
+          ],
+          "expected": [],
+          "actual": [
+            "openai_realtime_api"
+          ]
+        },
+        {
+          "file": "realtime_live_check_result.json",
+          "path": [
+            "status"
+          ],
+          "expected": "completed",
+          "actual": "failed"
+        },
+        {
+          "file": "realtime_live_check_result.json",
+          "path": [
+            "network_request_executed"
+          ],
+          "expected": true,
+          "actual": false
+        }
+      ],
+      "next_actions": [
+        "Provide the missing input(s): OPENAI_API_KEY; then rerun `--run-realtime-live-check <artifact-dir> --execute`.",
+        "Missing for OpenAI Realtime check: OPENAI_API_KEY"
+      ]
+    }
+  ]
+}
