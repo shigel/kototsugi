@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -12,9 +13,15 @@ RUFF = ROOT / ".venv" / "bin" / "ruff"
 
 
 def run(command: list[str]) -> dict[str, Any]:
+    env = os.environ.copy()
+    pythonpath = str(ROOT / "src")
+    if env.get("PYTHONPATH"):
+        pythonpath = pythonpath + os.pathsep + env["PYTHONPATH"]
+    env["PYTHONPATH"] = pythonpath
     completed = subprocess.run(
         command,
         cwd=ROOT,
+        env=env,
         text=True,
         capture_output=True,
         check=False,

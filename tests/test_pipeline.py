@@ -714,6 +714,18 @@ def test_process_transcript_events_uses_only_final_events_for_artifacts(tmp_path
     partial_transcript = (output_dir / "partial_transcript.md").read_text(encoding="utf-8")
     assert "かもしれません" not in transcript
     assert "かもしれません" in partial_transcript
+    requirements = json.loads((output_dir / "requirements_items.json").read_text(encoding="utf-8"))
+    questions = json.loads((output_dir / "questions.json").read_text(encoding="utf-8"))
+    issues = json.loads((output_dir / "issue_candidates.json").read_text(encoding="utf-8"))
+    assert all("line_" not in item["source_event_ids"] for item in requirements)
+    requirement_event_ids = {
+        event_id for item in requirements for event_id in item["source_event_ids"]
+    }
+    assert "evt_final_1" in requirement_event_ids
+    assert "evt_final_2" in requirement_event_ids
+    assert "evt_partial_1" not in requirement_event_ids
+    assert questions[0]["source_event_ids"] == ["evt_final_2"]
+    assert "evt_final_1" in issues[0]["source_event_ids"]
 
 
 def test_transcript_events_without_source_id_get_fallback_ids(tmp_path: Path) -> None:

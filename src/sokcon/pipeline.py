@@ -70,6 +70,7 @@ def process_transcript(
     external_destinations: Sequence[str] | None = None,
     external_registration_enabled: bool = False,
     event_metrics: Dict[str, float] | None = None,
+    transcript_lines: Sequence[TranscriptLine] | None = None,
 ) -> PipelineResult:
     """Process a transcript into MDD artifacts.
 
@@ -79,7 +80,7 @@ def process_transcript(
     """
     started_at = time.perf_counter()
     output_dir.mkdir(parents=True, exist_ok=True)
-    lines = parse_transcript(transcript)
+    lines = list(transcript_lines) if transcript_lines is not None else parse_transcript(transcript)
     decisions = extract_decisions(lines)
     questions = prioritize_questions(lines)
     requirements = extract_requirements(lines, decisions)
@@ -348,7 +349,7 @@ def process_transcript_events(
         "final_transcript_event_count": float(sum(1 for event in events if event.kind == "final")),
     }
     result = process_transcript(
-        transcript=render_event_transcript_input(final_lines),
+        transcript="",
         output_dir=output_dir,
         meeting_mode=meeting_mode,
         project_name=project_name,
@@ -357,6 +358,7 @@ def process_transcript_events(
         external_destinations=external_destinations,
         external_registration_enabled=external_registration_enabled,
         event_metrics=event_metrics,
+        transcript_lines=final_lines,
     )
     event_artifacts = [
         write_json(output_dir / "transcript_events.json", render_transcript_events(events)),

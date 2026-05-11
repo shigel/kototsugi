@@ -57,7 +57,7 @@ def write_data_model_files(root: Path) -> None:
                     "meeting_id": "mtg_local",
                     "status": "candidate",
                     "approval_required": True,
-                    "source_range": "00:00 PM",
+                    "source_range": "00:00 PM Eng",
                     "external_url": None,
                 }
             ]
@@ -193,6 +193,19 @@ def test_requirements_audit_detects_complete_artifact_set(tmp_path: Path) -> Non
     write_approval_gate_files(tmp_path)
     write_data_model_files(tmp_path)
     write_realtime_audio_files(tmp_path)
+    write(
+        tmp_path / "realtime_send_plan.json",
+        json.dumps(
+            {
+                "event_count": 3,
+                "events": [
+                    {"type": "input_audio_buffer.append"},
+                    {"type": "input_audio_buffer.append"},
+                    {"type": "input_audio_buffer.commit"},
+                ],
+            }
+        ),
+    )
     write(tmp_path / "rolling_summary.md", "## Window 1: 00:00-01:00")
     write(
         tmp_path / "performance_manifest.json",

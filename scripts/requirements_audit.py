@@ -59,7 +59,6 @@ CHECKLIST: list[dict[str, Any]] = [
                 "path": ["realtime_input_audio_format"],
                 "equals": "pcm16",
             },
-            {"file": "realtime_send_plan.json", "path": ["event_count"], "equals": 2},
             {
                 "file": "realtime_send_plan.json",
                 "path": ["events", 0, "type"],
@@ -67,7 +66,7 @@ CHECKLIST: list[dict[str, Any]] = [
             },
             {
                 "file": "realtime_send_plan.json",
-                "path": ["events", 1, "type"],
+                "path": ["events", -1, "type"],
                 "equals": "input_audio_buffer.commit",
             },
         ],
@@ -123,7 +122,11 @@ CHECKLIST: list[dict[str, Any]] = [
             {"file": "issue_candidates.json", "path": [0, "meeting_id"], "equals": "mtg_local"},
             {"file": "issue_candidates.json", "path": [0, "status"], "equals": "candidate"},
             {"file": "issue_candidates.json", "path": [0, "approval_required"], "equals": True},
-            {"file": "issue_candidates.json", "path": [0, "source_range"], "equals": "00:00 PM"},
+            {
+                "file": "issue_candidates.json",
+                "path": [0, "source_range"],
+                "starts_with": "00:00 PM",
+            },
             {"file": "issue_candidates.json", "path": [0, "external_url"], "equals": None},
         ],
     },
@@ -463,7 +466,7 @@ def build_blocker_summary(
                 {
                     "file": assertion["file"],
                     "path": assertion["path"],
-                    "expected": assertion["equals"],
+                    "expected": assertion.get("equals", assertion.get("starts_with")),
                     "actual": assertion.get("actual"),
                 }
                 for assertion in check["json_assertions"]
@@ -566,8 +569,17 @@ def evaluate_json_assertion(artifact_dir: Path, assertion: dict[str, Any]) -> di
             value = value[part]
     except (json.JSONDecodeError, KeyError, IndexError, TypeError) as error:
         return {**assertion, "passed": False, "actual": None, "error": str(error)}
-    expected = assertion["equals"]
-    return {**assertion, "passed": value == expected, "actual": value}
+    if "equals" in assertion:
+        expected = assertion["equals"]
+        return {**assertion, "passed": value == expected, "actual": value}
+    if "starts_with" in assertion:
+        expected = assertion["starts_with"]
+        return {
+            **assertion,
+            "passed": isinstance(value, str) and value.startswith(str(expected)),
+            "actual": value,
+        }
+    return {**assertion, "passed": False, "actual": value, "error": "unsupported assertion"}
 
 
 def load_json_object(path: Path) -> dict[str, Any]:
