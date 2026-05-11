@@ -3,7 +3,7 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .ruff_cache/
-kototsugi-output/
+sokcon-output/
 review-report.json
 .DS_Store
 .env

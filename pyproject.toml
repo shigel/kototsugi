@@ -1,7 +1,7 @@
 [project]
-name = "kototsugi"
+name = "sokcon"
 version = "0.1.0"
-description = "Meeting Driven Development CLI that turns meeting transcripts into specs, questions, diagrams, issues, and implementation plans."
+description = "Social conversation to construction: turn live conversations and meeting transcripts into specs, questions, diagrams, issues, and implementation plans."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
@@ -9,7 +9,7 @@ authors = [{ name = "shigeru saito", email = "saito@najimino.co.jp" }]
 dependencies = []
 
 [project.scripts]
-kototsugi = "kototsugi.cli:main"
+sokcon = "sokcon.cli:main"
 
 [project.optional-dependencies]
 dev = [
