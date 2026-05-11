@@ -699,6 +699,16 @@ def test_process_transcript_events_uses_only_final_events_for_artifacts(tmp_path
     assert result.metrics["transcript_lines"] == 2
     assert (output_dir / "transcript_events.json").exists()
     assert (output_dir / "partial_transcript.md").exists()
+    evaluation = json.loads((output_dir / "evaluation.json").read_text(encoding="utf-8"))
+    state_snapshot = json.loads((output_dir / "state_snapshot.json").read_text(encoding="utf-8"))
+    performance = json.loads((output_dir / "performance_manifest.json").read_text(encoding="utf-8"))
+    success_conditions = json.loads(
+        (output_dir / "mvp_success_conditions.json").read_text(encoding="utf-8")
+    )
+    assert evaluation["quantitative"]["partial_transcript_event_count"] == 1
+    assert state_snapshot["metrics"]["transcript_event_count"] == 3
+    assert performance["metrics"]["partial_transcript_event_count"] == 1
+    assert success_conditions["metrics"]["final_transcript_event_count"] == 2
 
     transcript = (output_dir / "transcript.md").read_text(encoding="utf-8")
     partial_transcript = (output_dir / "partial_transcript.md").read_text(encoding="utf-8")

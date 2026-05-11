@@ -69,6 +69,7 @@ def process_transcript(
     retention_days: int = 30,
     external_destinations: Sequence[str] | None = None,
     external_registration_enabled: bool = False,
+    event_metrics: Dict[str, float] | None = None,
 ) -> PipelineResult:
     """Process a transcript into MDD artifacts.
 
@@ -92,7 +93,8 @@ def process_transcript(
     pr_draft = build_pull_request_draft(project_name, requirements, questions, issues)
     metrics = evaluate_outputs(lines, requirements, questions, issues, decisions)
     metrics.update(
-        {
+        event_metrics
+        or {
             "transcript_event_count": float(len(lines)),
             "partial_transcript_event_count": 0.0,
             "final_transcript_event_count": float(len(lines)),
@@ -338,6 +340,13 @@ def process_transcript_events(
     external_registration_enabled: bool = False,
 ) -> PipelineResult:
     final_lines = transcript_events_to_lines(events)
+    event_metrics = {
+        "transcript_event_count": float(len(events)),
+        "partial_transcript_event_count": float(
+            sum(1 for event in events if event.kind == "partial")
+        ),
+        "final_transcript_event_count": float(sum(1 for event in events if event.kind == "final")),
+    }
     result = process_transcript(
         transcript=render_event_transcript_input(final_lines),
         output_dir=output_dir,
@@ -347,14 +356,8 @@ def process_transcript_events(
         retention_days=retention_days,
         external_destinations=external_destinations,
         external_registration_enabled=external_registration_enabled,
+        event_metrics=event_metrics,
     )
-    event_metrics = {
-        "transcript_event_count": float(len(events)),
-        "partial_transcript_event_count": float(
-            sum(1 for event in events if event.kind == "partial")
-        ),
-        "final_transcript_event_count": float(sum(1 for event in events if event.kind == "final")),
-    }
     event_artifacts = [
         write_json(output_dir / "transcript_events.json", render_transcript_events(events)),
         write_text(
@@ -898,6 +901,7 @@ def build_performance_manifest(
             "post_meeting_generation": elapsed_seconds <= 300,
             "rolling_summary_window_configured": metrics["rolling_summary_window_count"] >= 0,
         },
+        "metrics": metrics,
         "background_worker_contract": {
             "heavy_processing_offloaded": True,
             "failure_isolation": worker_status.get("failure_isolation") is True,

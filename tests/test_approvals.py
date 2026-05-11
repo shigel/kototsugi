@@ -315,6 +315,34 @@ def test_execute_approval_plan_branch_creation_dry_run(tmp_path: Path) -> None:
     assert result["results"][0]["branch_creation_executed"] is False
 
 
+def test_execute_approval_plan_pull_request_creation_returns_manual_result(
+    tmp_path: Path,
+) -> None:
+    write_json(
+        tmp_path / "approval_plan.json",
+        {
+            "actions": [
+                {
+                    "id": "action_create_pull_request",
+                    "type": "pull_request_creation",
+                    "ready_to_execute": True,
+                    "execution_payload": {"title": "Draft PR"},
+                }
+            ]
+        },
+    )
+
+    result = execute_approval_plan(
+        artifact_dir=tmp_path,
+        config=load_external_registration_config({}),
+        execute=True,
+    )
+
+    assert result["results"][0]["id"] == "action_create_pull_request"
+    assert result["results"][0]["status"] == "manual_creation_required"
+    assert result["results"][0]["pull_request_creation_executed"] is False
+
+
 def test_execute_approval_plan_execute_uses_injected_sender(tmp_path: Path) -> None:
     write_json(
         tmp_path / "approval_plan.json",

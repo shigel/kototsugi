@@ -88,3 +88,29 @@ def test_send_macos_notifications_execute_uses_injected_runner(tmp_path: Path) -
     assert result["status"] == "sent"
     assert result["notification_request_executed"] is True
     assert calls == [["osascript", "-e", "display"]]
+
+
+def test_send_macos_notifications_execute_honors_disabled_plan(tmp_path: Path) -> None:
+    (tmp_path / "macos_notification_plan.json").write_text(
+        (
+            '{"enabled":false,'
+            '"notifications":[{"kind":"meeting_ended","command":["osascript","-e","display"]}]}'
+        ),
+        encoding="utf-8",
+    )
+    calls = []
+
+    def fake_runner(command):
+        calls.append(command)
+        return {"returncode": 0}
+
+    result = send_macos_notifications(
+        artifact_dir=tmp_path,
+        execute=True,
+        runner=fake_runner,
+    )
+
+    assert result["status"] == "disabled"
+    assert result["notification_request_executed"] is False
+    assert result["notification_count"] == 1
+    assert calls == []

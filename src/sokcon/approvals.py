@@ -229,6 +229,8 @@ def execute_approval_plan(
                 results.append(execute_external_email_action(action=action, execute=execute))
             elif action.get("type") == "branch_creation":
                 results.append(execute_branch_creation_action(action=action, execute=execute))
+            elif action.get("type") == "pull_request_creation":
+                results.append(execute_pull_request_creation_action(action=action, execute=execute))
             continue
         if not action.get("ready_to_execute"):
             results.append({"id": action.get("id", ""), "status": "skipped"})
@@ -290,6 +292,24 @@ def execute_branch_creation_action(
             "stdout": completed.stdout,
             "stderr": completed.stderr,
         },
+    }
+
+
+def execute_pull_request_creation_action(
+    *,
+    action: Dict[str, object],
+    execute: bool,
+) -> Dict[str, object]:
+    if not action.get("ready_to_execute"):
+        return {"id": action.get("id", ""), "status": "skipped"}
+    payload = action.get("execution_payload", {})
+    title = payload.get("title", "") if isinstance(payload, dict) else ""
+    return {
+        "id": action.get("id", ""),
+        "status": "dry_run" if not execute else "manual_creation_required",
+        "pull_request_creation_executed": False,
+        "title": title,
+        "message": "Pull request creation requires a human-operated GitHub integration.",
     }
 
 

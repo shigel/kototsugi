@@ -156,6 +156,13 @@ def send_macos_notifications(
     notifications = [
         item for item in plan.get("notifications", []) if isinstance(item, dict)
     ]
+    if plan.get("enabled") is False:
+        return {
+            "status": "disabled",
+            "notification_request_executed": False,
+            "notification_count": len(notifications),
+            "plan": redact_commands(plan),
+        }
     if not execute:
         return {
             "status": "dry_run",
